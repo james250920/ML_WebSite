@@ -5,7 +5,7 @@
 }
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #201f20 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -18,7 +18,7 @@ body {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    box-shadow: 0 8px 32px 0 rgba(32, 38, 121, 0.37);
     max-width: 800px;
 }
 h1 {
