@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido - ML Website</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/landing.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>¡Bienvenido a ML Website!</h1>
+        <p>Tu aplicación Flask está funcionando correctamente.</p>
+        <p>Explora las diferentes secciones de nuestra aplicación:</p>
+        <div class="links">
+            <a href="/about">Acerca de</a>
+            <a href="/user/James">Usuario de Ejemplo</a>
+            <a href="/api/hello">API de Ejemplo</a>
+        </div>
+    </div>
+</body>
+</html>
