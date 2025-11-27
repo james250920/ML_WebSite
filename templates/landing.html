@@ -8,14 +8,55 @@
 </head>
 <body>
     <div class="container">
-        <h1>¡Bienvenido a Voice Detected!</h1>
-        <p>Tu aplicación Flask está funcionando correctamente.</p>
-        <p>Explora las diferentes secciones de nuestra aplicación:</p>
-        <div class="links">
-            <a href="/about">Acerca de</a>
-            <a href="/user/James">Usuario de Ejemplo</a>
-            <a href="/api/hello">API de Ejemplo</a>
+        <h1>Voice Detected AI</h1>
+        <p>Sube un archivo de audio para analizar su autenticidad e identidad.</p>
+        
+        <form action="/api/analyze" method="POST" enctype="multipart/form-data" class="main-form">
+            <!-- Sección de Carga de Archivo -->
+            <div class="upload-section">
+                <input type="file" id="audio-file" name="audio" accept="audio/*" hidden onchange="updateFileName()">
+                <label for="audio-file" class="upload-box">
+                    <i class="fas fa-cloud-upload-alt fa-3x"></i>
+                    <span class="upload-text">Arrastra tu audio aquí o haz clic para buscar</span>
+                    <span id="file-name-display" class="file-name">Ningún archivo seleccionado</span>
+                </label>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="action-buttons">
+                <button type="submit" name="action" value="detect" class="btn btn-detect">
+                    <i class="fas fa-shield-alt"></i>
+                    Detectar Real/Fake
+                </button>
+                
+                <button type="submit" name="action" value="identify" class="btn btn-identify">
+                    <i class="fas fa-user-tag"></i>
+                    ¿Quién es?
+                </button>
+            </div>
+        </form>
+
+        <!-- Botón About -->
+        <div class="footer-section">
+            <a href="/about" class="btn btn-about">
+                <i class="fas fa-info-circle"></i>
+                Acerca de
+            </a>
         </div>
     </div>
+
+    <script>
+        function updateFileName() {
+            const input = document.getElementById('audio-file');
+            const display = document.getElementById('file-name-display');
+            if (input.files && input.files.length > 0) {
+                display.textContent = input.files[0].name;
+                display.classList.add('active');
+            } else {
+                display.textContent = 'Ningún archivo seleccionado';
+                display.classList.remove('active');
+            }
+        }
+    </script>
 </body>
 </html>

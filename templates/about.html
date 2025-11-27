@@ -3,26 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acerca de - ML Website</title>
+    <title>Acerca de - Verificación de Identidad por Voz</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Acerca del detector de Voces clonadas y detector de identidad</h1>
-        <p>Esta es una aplicación Flask profesional diseñada con una arquitectura modular y escalable.</p>
+        <h1>Acerca del Sistema de Verificación de Identidad por Voz</h1>
+        <p>Sistema biométrico basado en Machine Learning para la identificación de personas mediante análisis de voz, utilizando Coeficientes Cepstrales en Frecuencia Mel (MFCC) y técnicas avanzadas de detección de deepfakes de audio.</p>
         
         <div class="features">
-            <h2>Características:</h2>
+            <h2>Características del Sistema:</h2>
             <ul>
-                <li>Arquitectura basada en Blueprints</li>
-                <li>Separación de rutas y vistas</li>
-                <li>Sistema de templates organizado</li>
-                <li>API RESTful integrada</li>
-                <li>Diseño responsive y moderno</li>
+                <li><strong>Verificación Biométrica por Voz:</strong> Identifica personas mediante características vocales únicas (timbre, estructura vocal)</li>
+                <li><strong>Detección de Deepfakes de Audio:</strong> Diferencia entre voces reales y sintéticas generadas por IA</li>
+                <li><strong>Extracción de Características MFCC:</strong> Análisis de 13 coeficientes cepstrales más características espectrales avanzadas</li>
+                <li><strong>Modelos de ML Implementados:</strong> Support Vector Machine (SVM) y Random Forest optimizados mediante GridSearch</li>
+                <li><strong>Procesamiento con Librosa:</strong> Análisis espectral incluyendo centroide, rolloff, ZCR, energía RMS, chroma y tonnetz</li>
+                <li><strong>Datasets Multilingües:</strong> Evaluado con ASVspoof2019, VCTK-Corpus y dataset regional propio</li>
+            </ul>
+        </div>
+
+        <div class="research-context">
+            <h2>Contexto de la Investigación:</h2>
+            <p>Esta aplicación implementa los hallazgos de investigaciones recientes en biometría vocal, donde se demostró que:</p>
+            <ul>
+                <li>El 70% de usuarios globales demanda mecanismos biométricos en entornos laborales</li>
+                <li>La variabilidad lingüística afecta significativamente el rendimiento de sistemas ASV</li>
+                <li>Los MFCC combinados con SVM/Random Forest alcanzan precisiones superiores al 88% en identificación de hablantes</li>
+                <li>Los sistemas ASV enfrentan vulnerabilidades críticas ante ataques de spoofing y deepfakes</li>
+            </ul>
+        </div>
+
+        <div class="technical-specs">
+            <h2>Especificaciones Técnicas:</h2>
+            <ul>
+                <li><strong>Frecuencia de Muestreo:</strong> 16 kHz (mono)</li>
+                <li><strong>Duración de Audio:</strong> 2-4 segundos por muestra</li>
+                <li><strong>Vector de Características:</strong> 86 dimensiones por archivo</li>
+                <li><strong>Normalización:</strong> StandardScaler para características extraídas</li>
+                <li><strong>División de Datos:</strong> 75% entrenamiento, 15% validación, 15% test</li>
+                <li><strong>Métricas de Evaluación:</strong> Accuracy, Precision, Recall, F1-Score</li>
             </ul>
         </div>
         
-        <p>Desarrollado con Flask, siguiendo las mejores prácticas de desarrollo web.</p>
+        <p class="footer-text">Desarrollado siguiendo las mejores prácticas en biometría vocal y seguridad de autenticación, basado en investigaciones de verificación cross-modal y detección de audio sintético.</p>
         
         <a href="/" class="back-link">← Volver al inicio</a>
     </div>
