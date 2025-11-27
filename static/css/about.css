@@ -3,58 +3,85 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #0b0b0b 0%, #ffffff 100%);
+    background: linear-gradient(135deg, #1a2a6c 0%, #b21f1f 50%, #fdbb2d 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     color: white;
 }
+
 .container {
-    padding: 40px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    max-width: 800px;
+    padding: 50px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    max-width: 900px;
+    width: 90%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 h1 {
     font-size: 2.5em;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-weight: 700;
+    background: linear-gradient(to right, #fff, #ccc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
+
 p {
     font-size: 1.1em;
     margin-bottom: 20px;
     line-height: 1.8;
+    color: #ddd;
 }
-.features {
+
+.features, .research-context, .technical-specs {
     margin: 30px 0;
+    text-align: left;
 }
-.features h2 {
+
+.features h2, .research-context h2, .technical-specs h2 {
     font-size: 1.8em;
     margin-bottom: 15px;
+    color: #fdbb2d;
 }
-.features ul {
+
+.features ul, .research-context ul, .technical-specs ul {
     list-style-position: inside;
-    font-size: 1.1em;
-    line-height: 2;
+    font-size: 1em;
+    line-height: 1.8;
+    color: #ddd;
+}
+
+.footer-text {
+    margin-top: 30px;
+    font-style: italic;
+    color: #aaa;
 }
 .back-link {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 25px;
-    background: rgba(255, 255, 255, 0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    padding: 15px 30px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 50px;
     transition: all 0.3s ease;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 1em;
 }
+
 .back-link:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
 }
