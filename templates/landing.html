@@ -13,9 +13,8 @@
         <p>Sube un archivo de audio para analizar su autenticidad e identidad.</p>
         
         <form id="audio-form" class="main-form">
-            <!-- Sección de Carga de Archivo -->
             <div class="upload-section">
-                <input type="file" id="audio-file" name="audio" accept="audio/*" hidden onchange="updateFileName()">
+                <input type="file" id="audio-file" name="audio" accept=".wav,.mp3,.ogg,.flac,.m4a,.aac,.opus,.webm,.wma" hidden onchange="updateFileName()">
                 <label for="audio-file" class="upload-box">
                     <i class="fas fa-cloud-upload-alt fa-3x"></i>
                     <span class="upload-text">Arrastra tu audio aquí o haz clic para buscar</span>
@@ -23,7 +22,6 @@
                 </label>
             </div>
 
-            <!-- Botones de Acción -->
             <div class="action-buttons">
                 <button type="button" onclick="analyzeAudio('detect')" class="btn btn-detect">
                     <i class="fas fa-shield-alt"></i>
@@ -37,17 +35,14 @@
             </div>
         </form>
 
-        <!-- Modal Overlay -->
         <div id="modal-overlay" class="modal-overlay" style="display: none;" onclick="closeModal()">
             <div class="modal-content" onclick="event.stopPropagation()">
-                <!-- Loading State -->
                 <div id="modal-loading" class="modal-loading" style="display: none;">
                     <div class="spinner"></div>
                     <p>Analizando audio...</p>
                     <p class="loading-subtext">Por favor espera</p>
                 </div>
 
-                <!-- Result State -->
                 <div id="modal-result" class="modal-result" style="display: none;">
                     <button class="modal-close" onclick="closeModal()">
                         <i class="fas fa-times"></i>
@@ -56,7 +51,7 @@
                     <h2 id="result-title" class="result-title">Resultado</h2>
                     <div id="result-content" class="result-content"></div>
                     <div class="modal-actions">
-                        <button onclick="closeModal()" class="btn btn-primary">
+                        <button onclick="closeModal()" class="btn btn-primary btn-modal-action">
                             <i class="fas fa-redo"></i>
                             Analizar Nuevo Audio
                         </button>
@@ -65,8 +60,11 @@
             </div>
         </div>
 
-        <!-- Botón About -->
         <div class="footer-section">
+            <button onclick="convertToWav()" class="btn btn-convert">
+                <i class="fas fa-file-audio"></i>
+                Convertir a WAV
+            </button>
             <a href="/about" class="btn btn-about">
                 <i class="fas fa-info-circle"></i>
                 Acerca de
@@ -93,6 +91,16 @@
 
             if (!file) {
                 showModal('error', 'Error', 'Por favor, selecciona un archivo de audio primero.');
+                return;
+            }
+
+            // Validar formato de archivo
+            const allowedFormats = ['.wav', '.mp3', '.ogg', '.flac', '.m4a', '.aac', '.opus', '.webm', '.wma'];
+            const fileName = file.name.toLowerCase();
+            const isValidFormat = allowedFormats.some(format => fileName.endsWith(format));
+            
+            if (!isValidFormat) {
+                showModal('error', 'Formato no Permitido', 'Formato de archivo no permitido. Use: wav, mp3, ogg, flac, m4a, aac, opus, webm, wma');
                 return;
             }
 
@@ -195,17 +203,97 @@
             }
         }
 
+        function convertToWav() {
+            const fileInput = document.getElementById('audio-file');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                showModal('error', 'Error', 'Por favor, selecciona un archivo de audio primero.');
+                return;
+            }
+
+            // Validar formato de archivo
+            const allowedFormats = ['.wav', '.mp3', '.ogg', '.flac', '.m4a', '.aac', '.opus', '.webm', '.wma'];
+            const fileName = file.name.toLowerCase();
+            const isValidFormat = allowedFormats.some(format => fileName.endsWith(format));
+            
+            if (!isValidFormat) {
+                showModal('error', 'Formato no Permitido', 'Formato de archivo no permitido. Use: wav, mp3, ogg, flac, m4a, aac, opus, webm, wma');
+                return;
+            }
+
+            // Mostrar modal con loading
+            const overlay = document.getElementById('modal-overlay');
+            const loading = document.getElementById('modal-loading');
+            const result = document.getElementById('modal-result');
+            
+            overlay.style.display = 'flex';
+            loading.style.display = 'block';
+            result.style.display = 'none';
+            loading.querySelector('p').textContent = 'Convirtiendo a WAV...';
+
+            // Crear FormData para enviar el archivo
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Enviar petición al backend FastAPI directamente
+            fetch('http://localhost:8000/api/dl/convert-to-wav', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al convertir el archivo');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                // Crear enlace de descarga
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                
+                // Mantener el nombre original pero cambiar extensión a .wav
+                const originalName = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+                a.download = originalName + '.wav';
+                
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                // Mostrar mensaje de éxito
+                const resultIcon = document.getElementById('result-icon');
+                const resultTitle = document.getElementById('result-title');
+                const resultContent = document.getElementById('result-content');
+                
+                loading.style.display = 'none';
+                result.style.display = 'block';
+                
+                resultTitle.textContent = 'Conversión Exitosa';
+                resultIcon.innerHTML = '<i class="fas fa-check-circle fa-5x" style="color: #4ade80;"></i>';
+                resultContent.innerHTML = `
+                    <div class="result-info">
+                        <h3 class="result-prediction">Archivo Convertido</h3>
+                        <p class="analysis">El archivo se ha descargado como <strong>${originalName}.wav</strong></p>
+                    </div>
+                `;
+                
+                // Resetear texto del loading para próximas operaciones
+                setTimeout(() => {
+                    loading.querySelector('p').textContent = 'Analizando audio...';
+                }, 500);
+            })
+            .catch(error => {
+                showModal('error', 'Error de Conversión', error.message || 'No se pudo convertir el archivo. Verifica que el backend esté ejecutándose.');
+                loading.querySelector('p').textContent = 'Analizando audio...';
+            });
+        }
+
         function resetForm() {
             document.getElementById('audio-file').value = '';
             document.getElementById('file-name-display').textContent = 'Ningún archivo seleccionado';
             document.getElementById('file-name-display').classList.remove('active');
-            document.getElementById('audio-form').style.display = 'block';
-            document.getElementById('result-container').style.display = 'none';
         }
     </script>
 </body>
-        function resetForm() {
-            document.getElementById('audio-file').value = '';
-            document.getElementById('file-name-display').textContent = 'Ningún archivo seleccionado';
-            document.getElementById('file-name-display').classList.remove('active');
-        }

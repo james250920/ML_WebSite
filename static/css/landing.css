@@ -43,7 +43,6 @@ p {
     font-weight: 300;
 }
 
-/* Upload Section */
 .upload-section {
     margin-bottom: 40px;
 }
@@ -89,7 +88,6 @@ p {
     font-weight: bold;
 }
 
-/* Buttons */
 .action-buttons {
     display: flex;
     gap: 20px;
@@ -136,13 +134,26 @@ p {
     padding-top: 20px;
     display: flex;
     justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.btn-about {
+.btn-about,
+.btn-convert {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.3);
     padding: 10px 25px;
     font-size: 1em;
+}
+
+.btn-convert {
+    background: linear-gradient(45deg, #11998e, #38ef7d);
+    border: none;
+}
+
+.btn-convert:hover {
+    background: linear-gradient(45deg, #0f8a7d, #2dd368);
+    transform: translateY(-3px);
 }
 
 .btn-about:hover {
@@ -150,7 +161,6 @@ p {
     border-color: white;
 }
 
-/* Loading Spinner */
 .loading-container {
     text-align: center;
     padding: 40px;
@@ -171,7 +181,6 @@ p {
     100% { transform: rotate(360deg); }
 }
 
-/* Result Container */
 .result-container {
     animation: fadeIn 0.5s ease-in;
 }
@@ -259,7 +268,6 @@ p {
     margin-top: 20px;
 }
 
-/* Modal Styles */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -388,6 +396,21 @@ p {
     font-style: italic;
 }
 
+.btn-modal-action {
+    background: linear-gradient(45deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 20px;
+}
+
+.btn-modal-action:hover {
+    background: linear-gradient(45deg, #5568d3, #653a8e);
+    transform: translateY(-2px);
+}
+
 @keyframes fadeInOverlay {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -404,7 +427,6 @@ p {
     }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .container {
         padding: 30px 20px;

@@ -1,28 +1,14 @@
-"""
-Servicios para consumir APIs externas
-"""
 import requests
 import os
 from api_config import APIConfig
 
 class AudioAnalysisService:
-    """Servicio para análisis de audio usando APIs externas"""
     
     @staticmethod
     def detect_deepfake(audio_path):
-        """
-        Detecta si el audio es real o fake usando API externa
-        
-        Args:
-            audio_path (str): Ruta del archivo de audio
-            
-        Returns:
-            dict: Resultado del análisis
-        """
         try:
-            # Llamada al backend real
             with open(audio_path, 'rb') as audio_file:
-                files = {'audio': audio_file}
+                files = {'file': (os.path.basename(audio_path), audio_file, 'audio/wav')}
                 url = APIConfig.ML_BACKEND_URL + APIConfig.ML_PREDICT_ENDPOINT
                 
                 response = requests.post(
@@ -33,17 +19,23 @@ class AudioAnalysisService:
                 
                 if response.status_code == 200:
                     api_data = response.json()
+                    prediction_data = api_data.get('prediction', {})
+                    label = prediction_data.get('label', 'DESCONOCIDO')
+                    confidence = prediction_data.get('confidence', 0)
+                    is_deepfake = prediction_data.get('is_deepfake', False)
+                    probabilities = api_data.get('probabilities', {})
                     
-                    # Adaptar respuesta del backend al formato esperado
                     return {
                         'status': 'success',
-                        'result': api_data.get('prediction', 'Desconocido'),
-                        'confidence': api_data.get('confidence', 0) * 100,
+                        'result': label,
+                        'confidence': confidence,
                         'details': {
-                            'authenticity': api_data.get('prediction', 'Desconocido'),
-                            'probability': api_data.get('confidence', 0),
-                            'analysis': api_data.get('message', 'Análisis completado'),
-                            'technical_details': api_data.get('details', {})
+                            'authenticity': label,
+                            'is_deepfake': is_deepfake,
+                            'probability': confidence / 100,
+                            'analysis': f'Audio clasificado como {label} con {confidence}% de confianza',
+                            'probabilities': probabilities,
+                            'technical_details': api_data.get('audio_info', {})
                         }
                     }
                 else:
@@ -56,34 +48,27 @@ class AudioAnalysisService:
         except requests.exceptions.Timeout:
             return {
                 'error': 'Timeout al conectar con la API',
-                'status': 'error'
+                'status': 'error',
+                'message': 'El servidor tardó demasiado en responder'
             }
         except requests.exceptions.ConnectionError:
             return {
-                'error': 'No se pudo conectar con el servidor backend. Verifica que esté ejecutándose en http://localhost:8000',
-                'status': 'error'
+                'error': 'No se pudo conectar con el servidor backend',
+                'status': 'error',
+                'message': 'Verifica que el backend esté ejecutándose en http://localhost:8000'
             }
         except Exception as e:
             return {
                 'error': f'Error inesperado: {str(e)}',
-                'status': 'error'
+                'status': 'error',
+                'message': str(e)
             }
     
     @staticmethod
     def identify_speaker(audio_path):
-        """
-        Identifica al hablante del audio usando API externa
-        
-        Args:
-            audio_path (str): Ruta del archivo de audio
-            
-        Returns:
-            dict: Resultado de la identificación
-        """
         try:
-            # Llamada al backend real
             with open(audio_path, 'rb') as audio_file:
-                files = {'audio': audio_file}
+                files = {'file': (os.path.basename(audio_path), audio_file, 'audio/wav')}
                 url = APIConfig.ML_BACKEND_URL + APIConfig.ML_PREDICT_ENDPOINT
                 
                 response = requests.post(
@@ -94,22 +79,20 @@ class AudioAnalysisService:
                 
                 if response.status_code == 200:
                     api_data = response.json()
-                    
-                    # Adaptar respuesta del backend al formato esperado
-                    speaker_name = api_data.get('speaker', 'Desconocido')
-                    confidence = api_data.get('confidence', 0)
+                    prediction_data = api_data.get('prediction', {})
+                    label = prediction_data.get('label', 'DESCONOCIDO')
+                    confidence = prediction_data.get('confidence', 0)
                     
                     return {
                         'status': 'success',
-                        'result': speaker_name,
-                        'confidence': confidence * 100,
+                        'result': 'Función en desarrollo',
+                        'confidence': confidence,
                         'details': {
-                            'identified': speaker_name != 'Desconocido',
-                            'speaker': speaker_name,
-                            'probability': confidence,
-                            'possible_matches': api_data.get('possible_matches', []),
-                            'message': api_data.get('message', 'Análisis completado'),
-                            'analysis': api_data.get('analysis', 'Identificación de hablante procesada')
+                            'identified': False,
+                            'speaker': 'No disponible',
+                            'probability': confidence / 100,
+                            'message': 'La identificación de hablante estará disponible próximamente',
+                            'current_analysis': f'Audio detectado como {label}'
                         }
                     }
                 else:
@@ -137,19 +120,8 @@ class AudioAnalysisService:
     
     @staticmethod
     def analyze_audio_quality(audio_path):
-        """
-        Analiza la calidad del audio
-        
-        Args:
-            audio_path (str): Ruta del archivo de audio
-            
-        Returns:
-            dict: Análisis de calidad
-        """
-        # Análisis básico de calidad del archivo
         file_size = os.path.getsize(audio_path)
         file_extension = os.path.splitext(audio_path)[1].lower()
-        
         return {
             'file_size': file_size,
             'format': file_extension,
